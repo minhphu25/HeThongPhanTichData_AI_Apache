@@ -1,0 +1,8 @@
+psycopg2-binary>=2.9
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+joblib>=1.3
+matplotlib>=3.7
+# Tùy chọn - tách từ tiếng Việt chính xác hơn cho bước trích xuất từ khóa:
+# underthesea>=6.8

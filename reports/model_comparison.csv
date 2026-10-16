@@ -1,0 +1,5 @@
+﻿model,cv_f1_mean,cv_f1_std,test_accuracy,test_f1_macro,production_accuracy,production_f1_macro,train_seconds,inference_ms_per_1000
+Từ điển cảm xúc (baseline),0.8793,0.0058,0.8798,0.8787,0.9126,0.9136,0.66,226.5
+TF-IDF + Multinomial Naive Bayes,0.95,0.0084,0.9399,0.9397,0.9974,0.9973,2.71,93.5
+TF-IDF (từ + ký tự) + Logistic Regression,0.9458,0.0125,0.9399,0.9397,0.9769,0.9764,16.51,587.9
+TF-IDF (từ + ký tự) + Linear SVM (hiệu chỉnh xác suất),0.95,0.0084,0.9399,0.9397,0.9897,0.989,14.21,565.5

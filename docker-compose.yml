@@ -1,0 +1,61 @@
+# CSDL trung tâm PostgreSQL 16 và Apache Superset cho hệ thống phân tích tin tức.
+# Khởi động:  docker compose up -d
+services:
+  postgres:
+    image: postgres:16
+    container_name: news_dw_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: news_dw
+      POSTGRES_USER: news_admin
+      POSTGRES_PASSWORD: news_admin_123   # đổi khi triển khai thật
+      TZ: Asia/Ho_Chi_Minh
+      PGTZ: Asia/Ho_Chi_Minh
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U news_admin -d news_dw"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [newsnet]
+
+  superset:
+    image: apache/superset:3.0.0
+    container_name: news_dw_superset
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8088:8088"
+    environment:
+      SUPERSET_SECRET_KEY: "news-ai-analytics-secret-key-super-secure"
+      SUPERSET_LOAD_EXAMPLES: "no"
+      CYPRESS_CONFIG: "false"
+    volumes:
+      - superset_home:/app/superset_home
+      - ./superset:/app/pythonpath
+    entrypoint:
+      - /bin/sh
+      - -c
+      - >
+        superset fab create-admin --username admin --firstname Superset --lastname Admin --email admin@superset.com --password admin &&
+        superset db upgrade &&
+        superset init &&
+        (if [ -f /app/pythonpath/dashboard_export.zip ]; then superset import-dashboards -p /app/pythonpath/dashboard_export.zip -u admin; fi) &&
+        /usr/bin/run-server.sh
+
+    networks: [newsnet]
+
+volumes:
+  pgdata:
+  superset_home:
+
+networks:
+  newsnet:
+    name: newsnet
+
