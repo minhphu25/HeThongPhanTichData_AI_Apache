@@ -6,6 +6,19 @@
 
 -- 1) Chi tiết từng bài báo kèm kết quả cảm xúc (dataset chính cho Superset)
 CREATE OR REPLACE VIEW analytics.v_article_sentiment AS
+WITH active_model AS (
+    SELECT COALESCE(
+        (SELECT m.model_version 
+         FROM analytics.model_registry m 
+         WHERE m.is_active 
+           AND EXISTS (SELECT 1 FROM analytics.article_sentiment s WHERE s.model_version = m.model_version)
+         LIMIT 1),
+        (SELECT s.model_version 
+         FROM analytics.article_sentiment s 
+         ORDER BY s.predicted_at DESC 
+         LIMIT 1)
+    ) AS model_version
+)
 SELECT a.article_id,
        a.title,
        a.summary,
@@ -35,8 +48,8 @@ FROM core.article a
 JOIN core.dim_source   s  ON s.source_id   = a.source_id
 JOIN core.dim_category c  ON c.category_id = a.category_id
 JOIN core.dim_date     d  ON d.date_key    = a.published_date
-JOIN analytics.article_sentiment se ON se.article_id = a.article_id
-JOIN analytics.model_registry    m  ON m.model_version = se.model_version AND m.is_active;
+JOIN active_model      am ON TRUE
+JOIN analytics.article_sentiment se ON se.article_id = a.article_id AND se.model_version = am.model_version;
 
 -- 2) Tổng hợp theo ngày x chuyên mục x nguồn (biểu đồ xu hướng, stacked bar)
 CREATE OR REPLACE VIEW analytics.v_daily_sentiment AS

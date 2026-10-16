@@ -9,8 +9,7 @@
 2. [Hướng Dẫn Sử Dụng Trang Web Điều Hành (http://localhost:8000)](#2-hướng-dẫn-sử-dụng-trang-web-điều-hành-httplocalhost8000)
 3. [Hướng Dẫn Vận Hành Apache Superset BI (http://localhost:8088)](#3-hướng-dẫn-vận-hành-apache-superset-bi-httplocalhost8088)
 4. [Tổng Quan Kiến Trúc Hệ Thống & Dữ Liệu](#4-tổng-quan-kiến-trúc-hệ-thống--dữ-liệu)
-5. [Các Kịch Bản Demo Khi Thuyết Trình / Chấm Bài](#5-các-kịch-bản-demo-khi-thuyết-trình--chấm-bài)
-6. [Xử Lý Sự Cố Thường Gặp (Troubleshooting)](#6-xử-lý-sự-cố-thường-gặp-troubleshooting)
+5. [Xử Lý Sự Cố Thường Gặp (Troubleshooting)](#5-xử-lý-sự-cố-thường-gặp-troubleshooting)
 
 ---
 
@@ -181,45 +180,7 @@ Hệ thống được thiết kế theo chuẩn Enterprise Data Warehouse tích 
 
 ---
 
-## 5. CÁC KỊCH BẢN DEMO KHI THUYẾT TRÌNH / CHẤM BÀI
-
-Để đạt điểm tối đa trong buổi vấn đáp/thuyết trình, sinh viên có thể thực hiện 3 kịch bản demo trực tiếp:
-
-### Kịch bản 1: Demo nạp tăng dần (Incremental Load)
-*Mục đích: Chứng minh hệ thống tự động nạp tin mới và biên tập lại tin cũ mà không bị trùng lặp dữ liệu.*
-1. Mở PowerShell, chạy lệnh sinh thêm 5 bài viết mới tại CMS và RSS:
-   ```powershell
-   python -m newsai.sample_data.simulate_new_data -n 5
-   ```
-2. Chạy lệnh cập nhật định kỳ (ETL ➔ Chấm điểm ➔ Dự báo lại):
-   ```powershell
-   python -m newsai.run_all --steps etl predict forecast
-   ```
-3. Xem màn hình terminal: ETL sẽ chỉ trích xuất đúng 10 bài mới (theo mốc Watermark), loại bỏ trùng lặp và chấm điểm bài mới.
-4. Tải lại trang web `http://localhost:8000`: Số lượng bài viết tăng thêm chính xác.
-
-### Kịch bản 2: Demo cơ chế Champion / Challenger trong MLOps
-*Mục đích: Chứng minh hệ thống chỉ kích hoạt mô hình mới nếu chất lượng tốt hơn mô hình cũ.*
-1. Chạy lệnh huấn luyện lại:
-   ```powershell
-   python -m newsai.run_all --steps train
-   ```
-   Hệ thống sẽ so sánh F1-macro của mô hình mới với mô hình đang active trong bảng `analytics.model_registry`.
-2. Nếu muốn bắt buộc kích hoạt phiên bản mới bất kể điểm số:
-   ```powershell
-   python -m newsai.run_all --steps train --force-activate
-   ```
-
-### Kịch bản 3: Thuyết trình kiến trúc Data Warehouse 4 tầng
-1. Mở mục **Kiến Trúc ETL (Phần 1)** trên trang web `http://localhost:8000`.
-2. Dựa vào sơ đồ luồng dữ liệu và bảng **Đối chiếu trước và sau khi làm sạch**:
-   - Giải thích cách loại bỏ thẻ `<p>`, `<a>`, ký tự `&amp;...`.
-   - Giải thích chuẩn hóa Unicode NFC tiếng Việt.
-   - Giải thích cơ chế khử trùng lặp liên nguồn bằng `content_hash = md5(tiêu đề + tóm tắt)`.
-
----
-
-## 6. XỬ LÝ SỰ CỐ THƯỜNG GẶP (TROUBLESHOOTING)
+## 5. XỬ LÝ SỰ CỐ THƯỜNG GẶP (TROUBLESHOOTING)
 
 | Hiện tượng | Nguyên nhân | Cách khắc phục |
 |---|---|---|

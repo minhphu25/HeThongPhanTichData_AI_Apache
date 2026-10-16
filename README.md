@@ -41,7 +41,8 @@ Truy cập:
 - 🌐 Web Dashboard: [http://localhost:8000](http://localhost:8000)
 - 📊 Apache Superset BI: [http://localhost:8088](http://localhost:8088) (`admin` / `admin`)
 
-> 📖 **Xem hướng dẫn chi tiết toàn tập:** Đọc file [HUONG_DAN_SU_DUNG.md](HUONG_DAN_SU_DUNG.md) để xem chi tiết cách thiết lập, vận hành, kịch bản demo thuyết trình và giải quyết lỗi.
+> 📖 **Xem hướng dẫn chi tiết:** Đọc file [HUONG_DAN_SU_DUNG.md](HUONG_DAN_SU_DUNG.md) để xem chi tiết cách thiết lập, vận hành, kịch bản demo thuyết trình và giải quyết lỗi.  
+> 🧪 **Xem kịch bản kiểm thử riêng:** Đọc file [KICH_BAN_TEST.md](KICH_BAN_TEST.md) để xem 8 kịch bản kiểm thử chi tiết và chạy script test tự động `python tests/test_system.py`.
 
 ### Các lệnh vận hành thường dùng (Đi kèm nhau)
 
